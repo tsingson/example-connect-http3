@@ -21,7 +21,7 @@ const (
 )
 
 func main() {
-	roundTripper := &http3.RoundTripper{
+	roundTripper := &http3.Transport{
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: skipVerify,
 		},
@@ -31,24 +31,49 @@ func main() {
 		Transport: roundTripper,
 	}
 
-	log.Println("connect: ", url)
-	log.Println("send: ", reqBody)
-	req, err := http.NewRequest("POST", url, strings.NewReader(reqBody))
+	log.Println(
+		"connect: ",
+		url,
+	)
+	log.Println(
+		"send: ",
+		reqBody,
+	)
+	req, err := http.NewRequest(
+		"POST",
+		url,
+		strings.NewReader(reqBody),
+	)
 	if err != nil {
-		log.Fatalf("error: %s", err)
+		log.Fatalf(
+			"error: %s",
+			err,
+		)
 	}
-	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add(
+		"Content-Type",
+		"application/json",
+	)
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("error: %s", err)
+		log.Fatalf(
+			"error: %s",
+			err,
+		)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("error: %s", err)
+		log.Fatalf(
+			"error: %s",
+			err,
+		)
 	}
 	defer resp.Body.Close()
 
-	log.Println("recv: ", string(body))
+	log.Println(
+		"recv: ",
+		string(body),
+	)
 }

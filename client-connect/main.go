@@ -24,7 +24,7 @@ const (
 var reqBody = &elizav1.SayRequest{Sentence: "Hello World!"}
 
 func main() {
-	roundTripper := &http3.RoundTripper{
+	roundTripper := &http3.Transport{
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: skipVerify,
 		},
@@ -34,14 +34,33 @@ func main() {
 		Transport: roundTripper,
 	}
 
-	svcClient := elizav1connect.NewElizaServiceClient(client, url, connect.WithGRPC())
+	svcClient := elizav1connect.NewElizaServiceClient(
+		client,
+		url,
+		connect.WithGRPC(),
+	)
 
-	log.Println("connect: ", url)
-	log.Println("send: ", reqBody)
-	resp, err := svcClient.Say(context.Background(), connect.NewRequest(reqBody))
+	log.Println(
+		"connect: ",
+		url,
+	)
+	log.Println(
+		"send: ",
+		reqBody,
+	)
+	resp, err := svcClient.Say(
+		context.Background(),
+		connect.NewRequest(reqBody),
+	)
 	if err != nil {
-		log.Fatalf("error: %s", err)
+		log.Fatalf(
+			"error: %s",
+			err,
+		)
 	}
 
-	log.Println("recv: ", resp.Msg)
+	log.Println(
+		"recv: ",
+		resp.Msg,
+	)
 }
